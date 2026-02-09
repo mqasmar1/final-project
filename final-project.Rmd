@@ -1,0 +1,708 @@
+---
+title: "Final Project - Showcase Your Inner Data Scientist"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+---
+```{r setup, echo=FALSE, fig.align="right", out.width="40%"}
+knitr::include_graphics("img/laptop-3190194_1920.jpg")
+```
+
+## TL;DR (Quick Overview)
+
+Pick a dataset that interests you and analyze it using the data science skills you've learned this semester. That's your final project in a nutshell.
+
+**Key components:**
+
+1. **Proposal** - Plan your analysis
+2. **Presentation** - Share your findings (5 minutes)
+3. **Executive Summary** - Write up your results
+
+**More details below.**
+
+---
+
+# Project Overview
+
+## What Is This Project?
+
+The final project is your opportunity to demonstrate the data science skills you've developed this semester by analyzing a dataset of your choosing. You'll pose research questions, analyze data to answer them, and communicate your findings effectively.
+
+**This project is about quality, not quantity.** Focus on doing a few things well rather than trying to do everything.
+
+## Learning Objectives
+
+By completing this project, you will:
+
+- ✅ Formulate meaningful research questions from data
+- ✅ Apply data wrangling and visualization techniques
+- ✅ Choose and justify appropriate statistical methods
+- ✅ Interpret results accurately and in context
+- ✅ Communicate findings clearly to an audience
+- ✅ Critique your own work and suggest improvements
+- ✅ Create reproducible data analysis workflows
+
+## What Makes a Good Project?
+
+**Focus on these priorities:**
+
+1. **Ask interesting questions** - Your research questions should be meaningful and answerable with your data
+2. **Use appropriate methods** - Choose statistical procedures that fit your questions
+3. **Create quality visualizations** - A few excellent plots are better than many mediocre ones
+4. **Communicate clearly** - Make your findings accessible to your audience
+5. **Be honest about limitations** - Discuss what your analysis can and cannot tell us
+6. **Make it reproducible** - Anyone should be able to run your code and get your results
+
+**What this project is NOT:**
+
+- ❌ An exhaustive analysis of every variable
+- ❌ Using every statistical method you've learned
+- ❌ A collection of random plots and statistics
+- ❌ A data dump without interpretation
+
+---
+
+# Choosing Your Dataset
+
+## Dataset Requirements
+
+Your dataset must meet these criteria:
+
+- **At least 50 observations** (rows)
+- **Between 10 to 20 variables** (columns)
+  - If you have a compelling reason to use a dataset outside this range, discuss with me first
+- **Mix of variable types:**
+
+  - Categorical variables (e.g., gender, region, type)
+  - Discrete numerical variables (e.g., counts, ages)
+  - Continuous numerical variables (e.g., measurements, prices, percentages)
+
+**Important considerations:**
+
+- **Accessibility:** Can you easily load the data into R?
+- **Complexity:** Is the dataset large enough to explore multiple relationships?
+- **Relevance:** Does it relate to topics you care about?
+- **Novelty:** It should NOT be a dataset we've used in class (homework, labs, or examples)
+
+## Where to Find Data
+
+### Recommended Data Repositories
+
+**General datasets:**
+
+- [TidyTuesday](https://github.com/rfordatascience/tidytuesday) - Weekly datasets with built-in community
+- [Kaggle Datasets](https://www.kaggle.com/datasets) - Wide variety of topics
+- [OpenIntro Datasets](http://openintrostat.github.io/openintro/) - Educational datasets
+- [Awesome Public Datasets](https://github.com/awesomedata/awesome-public-datasets) - Curated list
+
+**Government and health data:**
+
+- [UK Gov Data](https://data.gov.uk/)
+- [Youth Risk Behavior Surveillance System (YRBSS)](https://chronicdata.cdc.gov/Youth-Risk-Behaviors/DASH-Youth-Risk-Behavior-Surveillance-System-YRBSS/q6p7-56au)
+- [NHS Scotland Open Data](https://www.opendata.nhs.scot/)
+- [Scotland Official Statistics](https://statistics.gov.scot/home)
+
+**Regional and specialized:**
+
+- [Edinburgh Open Data](https://edinburghopendata.info/)
+- [Bikeshare Data Portal](https://www.bikeshare.com/data/)
+- [Harvard Dataverse](https://dataverse.harvard.edu/)
+- [PRISM Data Archive Project](https://www.icpsr.umich.edu/icpsrweb/content/ICPSR/fenway.html) - Social science data
+
+**Have another source?** Let me know and we can add it to the list!
+
+### Tips for Choosing Data
+
+- **Start with your interests:** Sports? Music? Social issues? Environment? Choose something you care about
+- **Check file format early:** Make sure you can load it into R (CSV and Excel are easiest)
+- **Preview the data:** Look at a sample before committing - are the variables well-documented?
+- **Consider scope:** Too small = limited analysis; Too large = overwhelming
+- **Ask for help:** If you're struggling to find data, come to office hours
+
+---
+
+# Project Components
+
+## Timeline
+
+| Component | Due Date | Weight |
+|:----------|:---------|:-------|
+| **Proposal** | Sunday, April 19 | 10 points |
+| **Presentation** | Thursday, June 4 | 50 points |
+| **Executive Summary** | Thursday, June 4 | 15 points |
+
+**Additional components:**
+
+- Reproducibility and organization: 10 points
+
+
+**Total: 85 points**
+
+---
+
+## Component 1: Proposal (10 points)
+
+### What Is the Proposal?
+
+The proposal is your project plan. It includes:
+
+1. Your research question and introduction
+2. Information about your dataset
+3. Your preliminary analysis plan
+
+**Think of it as a roadmap** - it keeps you on track and helps me provide useful feedback.
+
+### Proposal Sections
+
+#### Section 1: Introduction (max 1 page)
+
+Introduce your research question and provide context:
+
+- **What is your research question?** Be specific and focused
+- **Why is this interesting?** What makes it worth investigating?
+- **Where did the data come from?** Source, collection method, credibility
+- **What are the cases?** What does each row represent?
+- **What are the key variables?** Briefly describe the main variables you'll use
+
+**Example:**
+> *This project investigates whether housing prices in California are associated with proximity to the coast. The data comes from the 1990 California census and includes 20,640 block groups (geographic regions). Key variables include median house value, ocean proximity (categorical: <1H OCEAN, INLAND, NEAR BAY, NEAR OCEAN, ISLAND), median income, and population density.*
+
+#### Section 2: Data (max 1 page)
+
+Provide detailed information about your dataset:
+
+1. **Place your data file** in the `/data` folder of your repository
+2. **Create a data dictionary** (README) in the `/data` folder explaining:
+
+   - Variable names
+   - Variable types (categorical, numerical)
+   - Variable descriptions
+   - Units of measurement
+   - Coding schemes (e.g., 1 = Yes, 0 = No)
+3. **In your proposal document**, include the output of:
+```r
+library(tidyverse)
+glimpse(your_data)
+
+# OR
+
+library(skimr)
+skim(your_data)
+```
+
+**This shows:**
+
+- Number of observations and variables
+- Variable types
+- Missing values
+- Basic summary statistics
+
+#### Section 3: Data Analysis Plan (max 1 page)
+
+Outline your preliminary analysis approach:
+
+**A. Variables:**
+
+- **Outcome variable (Y):** What are you trying to predict or explain?
+- **Predictor variables (X):** What variables will you use to explain the outcome?
+
+**B. Comparison groups (if applicable):**
+
+- Will you compare different groups (e.g., regions, time periods, categories)?
+
+**C. Preliminary exploratory analysis:**
+
+- Include 2-3 summary statistics (means, medians, counts, etc.)
+- Include 2-3 visualizations (histograms, scatterplots, boxplots, etc.)
+- **Explain what you learn** from each - don't just show numbers/plots
+
+**D. Proposed methods:**
+
+- What statistical methods will you use? (e.g., linear regression, hypothesis testing, visualization)
+- Why are these methods appropriate for your question?
+- You can refine this later based on what you discover
+
+**E. Hypothesized results:**
+
+- What do you expect to find?
+- What specific results would support your hypothesis?
+
+### Proposal Length
+
+- Each section: **Maximum 1 page** (excluding figures and code output)
+- Check print preview to confirm length
+- Quality over quantity - be concise and clear
+
+### Proposal Grading
+
+| Component | Points |
+|:----------|:-------|
+| Data description and documentation | 3 pts |
+| Research question and analysis plan | 5 pts |
+| Code quality and organization | 2 pt |
+| **Total** | **10 pts** |
+
+### Resubmission Option
+
+After receiving feedback, you may **revise and resubmit** your proposal.
+
+**If you resubmit:**
+
+- Your final proposal score = average of both submissions
+- Deadline for resubmission: Sunday, May 3
+- This is optional but encouraged if you want to improve
+
+---
+
+## Component 2: Presentation (50 points)
+
+### Presentation Overview
+
+**Format:** 5 minutes maximum
+
+- **Pre-recorded video** submitted by 11:59pm on presentation day
+
+
+### Presentation Content
+
+Your presentation should tell a cohesive story, NOT a chronological account of everything you tried.
+
+**Include:**
+
+1. **Research question** (30 seconds)
+
+   - What are you investigating and why?
+
+2. **Data** (30 seconds)
+
+   - Where did it come from?
+   - What are the key variables?
+
+3. **Methods** (1 minute)
+
+   - What approach did you take?
+   - Why did you choose these methods?
+   - **Focus on choices and reasoning**, not every detail
+
+4. **Results** (2 minutes)
+
+   - What did you find?
+   - Use visualizations to show key findings
+   - Interpret results clearly
+
+5. **Limitations and conclusions** (1 minute)
+
+   - What are the limitations of your analysis?
+   - What are your main takeaways?
+   - What would you do differently or explore further?
+
+### Presentation Format
+
+**Slides:**
+
+- Use the provided template in your repo (`presentation.Rmd`)
+- Uses `xaringan` package for R Markdown slides
+- No slide limit, but respect the 5-minute time limit
+- Make slides **readable** - large text, clear visuals, minimal text
+- Turn off code display: `echo = FALSE` in chunk options
+
+**Delivery:**
+
+- Practice beforehand - 5 minutes goes quickly!
+- Divide time fairly among team members
+- Speak clearly and at a reasonable pace
+- Make eye contact (if live)
+
+### Presentation Day
+
+- **Presentation order** will be randomly generated
+- You'll watch other teams' presentations
+- You'll provide **peer feedback** via evaluation forms
+- Be respectful and engaged - you're learning from each other
+
+### Presentation Grading
+
+| Component | Points |
+|:----------|:-------|
+| **Time management** - Fair time division, stayed within 5 minutes | 6 pts |
+| **Research question** - Well-designed question with relevant data | 6 pts |
+| **Professionalism** - Well-practiced, everyone contributed meaningfully | 6 pts |
+| **Statistical accuracy** - Appropriate methods, correct interpretations | 12 pts |
+| **Critical thinking** - Thoughtful analysis, limitations discussed | 10 pts |
+| **Slides** - Well-organized, readable, clear visuals | 10 pts |
+| **Total** | **50 pts** |
+
+---
+
+## Component 3: Executive Summary (15 points)
+
+### What Is the Executive Summary?
+
+A concise summary of your entire project in the `README.md` file of your repository.
+
+**Think of it as:** What someone would read to quickly understand your project without watching your presentation or reading all your code.
+
+### What to Include
+
+**Required sections:**
+
+1. **Project title and your name**
+
+2. **Research question(s)**
+
+   - What did you investigate?
+
+3. **Dataset**
+
+   - What data did you use?
+   - Where did it come from?
+   - How many observations and variables?
+
+4. **Methodology**
+
+   - What methods did you use?
+   - Why were they appropriate?
+
+5. **Key findings**
+
+   - What did you discover?
+   - What do the results mean?
+
+6. **Limitations**
+
+   - What are the constraints of your analysis?
+   - What questions remain unanswered?
+
+### Length and Format
+
+- **Be concise** - aim for 2-3 paragraphs per section
+- **Be specific** - include actual findings, not just "we analyzed the data"
+- **Be clear** - write for an audience that hasn't seen your analysis
+- **Use proper formatting** - headers, bullet points where appropriate
+
+### Executive Summary Grading
+
+| Component | Points |
+|:----------|:-------|
+| Completeness - All required sections included | 5 pts |
+| Clarity - Clear, well-written, easy to understand | 5 pts |
+| Conciseness - Detailed enough but not overly long | 5 pts |
+| **Total** | **15 pts** |
+
+---
+
+# Repository Organization
+
+## Required Files and Folders
+
+Your final repository must include:
+```
+your-project-repo/
+├── README.Rmd                  # Your executive summary (source)
+├── README.md                   # Your executive summary (rendered)
+├── presentation.Rmd            # Your presentation slides (source)
+├── presentation.html           # Your presentation slides (rendered)
+├── /data                       # Folder for your dataset
+│   ├── your_data.csv           # Your dataset file
+│   └── README.md               # Data dictionary
+├── /proposal                   # Folder for your proposal
+│   └── proposal.Rmd            # Your project proposal
+└── /img                        # Folder for images (if needed)
+```
+
+## Style and Formatting
+
+**Code:**
+
+- Use clear, descriptive variable names
+- Include comments explaining complex steps
+- Follow tidyverse style guide
+- Make sure code runs without errors
+
+**Documents:**
+
+- Use headers to organize content
+- Include informative plot titles and axis labels
+- Make sure all text is readable
+- Check spelling and grammar
+
+**Reproducibility:**
+
+- Anyone should be able to knit your documents and get the same results
+- Include all necessary data files in the repository
+- Load all required packages at the beginning
+
+---
+
+# Tips for Success
+
+## General Tips
+
+- **Start early** - Don't wait until the last week
+- **Ask questions** - Come to office hours if stuck
+- **Focus on quality** - Better to do a few things well than many things poorly
+- **Be realistic** - Choose a manageable project scope
+- **Have fun!** - Pick a dataset that genuinely interests you
+
+
+## Technical Tips
+
+### Code
+
+- **Hide code in presentation** - Use `echo = FALSE` for clean slides
+- **Show code in analysis** - Include all code in your final documents
+- **Exception:** You can show specific code if you want to highlight something
+- **Test everything** - Knit early and often to catch errors
+
+### Data
+
+- **Clean your data early** - Handle missing values, inconsistencies
+- **Document your cleaning** - Explain decisions you made
+- **Check your work** - Verify results make sense
+- **Save intermediate steps** - Don't try to do everything in one pipe
+
+### Visualizations
+
+- **Make them readable** - Large text, clear labels, good color choices
+- **Less is more** - Don't overcrowd plots
+- **Add context** - Titles, captions, annotations
+- **Choose appropriate plot types** - Match the plot to your data and question
+
+---
+
+# Grading
+
+## Overall Grading Breakdown
+
+| Component | Points |
+|:----------|:-------|
+| **Proposal** | 10 pts |
+| **Presentation** | 50 pts |
+| **Executive Summary** | 15 pts |
+| **Reproducibility and Organization** | 10 pts |
+| **Total** | **85 pts** |
+
+## Grading Criteria
+
+Your project will be evaluated on:
+
+### 1. Content (Research Question Quality)
+
+- Is the research question interesting and well-designed?
+- Is the data relevant to answering the question?
+- Are the methods appropriate for the question?
+
+### 2. Correctness (Statistical Accuracy)
+
+- Are statistical procedures applied correctly?
+- Are results interpreted accurately?
+- Are limitations acknowledged?
+
+### 3. Communication (Presentation Quality)
+
+- Is the writing clear and well-organized?
+- Are visualizations effective and informative?
+- Are technical concepts explained accessibly?
+
+### 4. Critical Thinking (Depth of Analysis)
+
+- Is the project thoughtfully planned and executed?
+- Are limitations carefully considered?
+- Does the work show effort and creativity?
+
+## Grading Scale
+
+### Outstanding (90-100%)
+
+- Deep understanding of statistical concepts
+- Cogent, well-supported arguments
+- Clear identification and discussion of limitations
+- Excellent communication of results
+- Creative and thoughtful approach
+
+### Good (80-89%)
+
+- Solid understanding of most concepts
+- Adequate arguments with some support
+- Some limitations identified
+- Clear communication of most results
+- Good effort and execution
+
+### Passing (70-79%)
+
+- Understanding of basic concepts with some gaps
+- Arguments present but could be stronger
+- Limited discussion of limitations
+- Communication sometimes unclear
+- Satisfactory effort
+
+### Struggling (60-69%)
+
+- Misunderstanding of several key concepts
+- Weak or unsupported arguments
+- Limitations not adequately addressed
+- Communication often unclear
+- Effort present but significant issues
+
+### Insufficient (Below 60%)
+
+- Major misunderstanding of concepts
+- Inability to construct coherent arguments
+- No meaningful discussion of limitations
+- Unclear communication throughout
+- Insufficient effort
+
+---
+
+## Reproducibility and Organization (10 points)
+
+Your project will be evaluated on:
+
+- **Does the code run?** Can I knit your documents without errors?
+- **Is it organized?** Are files in appropriate folders with clear names?
+- **Is it documented?** Are there comments, a data dictionary, clear variable names?
+- **Is it complete?** Are all required components present?
+
+**To get full credit:**
+
+- ✅ All `.Rmd` files knit successfully
+- ✅ All required files are in the correct folders
+- ✅ Code is well-commented and readable
+- ✅ Data dictionary is complete and accurate
+- ✅ File names are clear and descriptive
+
+
+---
+
+# Academic Integrity
+
+## What's Expected
+
+- **Cite your sources** - if you use external resources, acknowledge them
+- **Original work** - don't copy from other teams or online sources
+
+---
+
+# Accessibility and Support
+
+## Accommodations
+
+If you need accommodations for this project, please:
+1. Contact me as early as possible
+2. Provide documentation from the Disability Services office
+3. We'll work together to ensure you can participate fully
+
+## Getting Help
+
+**Stuck on something? Here's what to do:**
+
+1. **Check course materials** - Review relevant lectures and assignments
+2. **Try troubleshooting** - Read error messages, search documentation
+3. **Ask your team** - Work together to solve problems
+4. **Office hours** - Come with specific questions
+5. **Email me** - If you can't make office hours
+
+**The earlier you ask for help, the better!**
+
+## Technical Issues
+
+**If you encounter technical problems:**
+
+- Git issues? Ask for help immediately
+- R/RStudio errors? Check error messages and documentation
+- Data loading problems? Try early so there's time to solve
+- Knitting failures? Test frequently to catch issues early
+
+---
+
+# Frequently Asked Questions
+
+## About the Dataset
+
+**Q: Can I use a dataset from another class?**
+A: Yes, as long as you're doing original analysis (not reusing previous work) and it wasn't used in this class.
+
+**Q: What if my dataset has more/fewer variables than required?**
+A: Talk to me first. If there's a good reason, we can make exceptions.
+
+**Q: Can I collect my own data?**
+A: Yes! Just make sure you can collect enough data by the proposal deadline.
+
+**Q: What if my dataset is too large to upload to GitHub?**
+A: We can work with you to either sample the data or use an alternative hosting method.
+
+## About the Analysis
+
+**Q: Do I have to use methods we learned in class?**
+A: Use tidyverse tools as required. You can also use methods beyond class if you understand them.
+
+**Q: How many visualizations do I need?**
+A: Quality over quantity. A few excellent, well-chosen visualizations are better than many poor ones.
+
+**Q: Can I do hypothesis testing / modeling / [specific method]?**
+A: If it's appropriate for your question and you can explain it clearly, yes!
+
+
+## About Logistics
+
+**Q: Can I submit my presentation video early?**
+A: Yes! Submit anytime before the 9am deadline on presentation day.
+
+**Q: What format should my presentation video be?**
+A: MP4 is preferred.
+
+**Q: When exactly is [component] due?**
+A: Check the due dates at the top of this document and on Canvas.
+
+---
+
+# Final Reminders
+
+## Before You Submit
+
+**Checklist for final submission:**
+
+- ✅ All required files in correct folders
+- ✅ Code runs without errors (test by knitting!)
+- ✅ Data dictionary is complete
+- ✅ Executive summary is in README.md
+- ✅ Presentation slides are finalized
+- ✅ Everything is committed and pushed to GitHub
+- ✅ You've reviewed the grading criteria
+- ✅ PDF submitted to Canvas (if required)
+
+## Quality Check
+
+Ask yourself:
+
+- Would someone unfamiliar with my project understand it from the README?
+- Are my visualizations clear and informative?
+- Have I explained my methods and results clearly?
+- Did I discuss limitations honestly?
+- Is my work reproducible?
+- Am I proud of this work?
+
+**If you can answer yes to all of these, you're ready to submit!**
+
+---
+
+# Good Luck!
+
+This is your chance to showcase everything you've learned this semester. Choose a dataset that interests you, ask meaningful questions, and tell a compelling story with data.
+
+**Remember:**
+
+- Focus on quality, not quantity
+- Communicate clearly
+- Be honest about limitations
+- Ask for help when needed
+- Have fun with it!
+
+**I'm excited to see what you discover!** 🎉
+
+---
+
+**Questions? Come to office hours or email me.**
+
