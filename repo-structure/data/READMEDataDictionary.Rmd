@@ -1,8 +1,29 @@
 ---
 title: "READMEDataDictionary"
-output: html_document
+author: "Max Asmar"
+output:
+  pdf_document: default
+  github_document: default
+  html_document:
+    df_print: paged
 ---
 **Data Dictionary**
+
+Here is a preview of the data, which I coded using the glimpse() function and initializing the data object.
+
+```{r load-packages, message = FALSE}
+library(tidyverse)
+library(broom)
+```
+
+```{r load-open-policing-data, eval = TRUE}
+open_policing_raw_data <- read_csv("../data/StanfordOpenPolicingcombined_data.csv")
+```
+
+```{r data-glimpse, eval= TRUE}
+library(tidyverse)
+glimpse(open_policing_raw_data)
+```
 
 ## Stanford Open Policing Combined Data CSV File
 
