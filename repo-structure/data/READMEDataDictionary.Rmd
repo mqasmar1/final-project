@@ -1,0 +1,33 @@
+---
+title: "READMEDataDictionary"
+output: html_document
+---
+**Data Dictionary**
+
+## Stanford Open Policing Combined Data CSV File
+
+There are no binary values used in my dataset nor coding schemes outside of state abbreviations for corresponding states and numerical values.
+
+Variables:
+
+- `location`: The location variable contains the county information for each observation in the following format: "____ COUNTY". It is a categorical variable.
+
+- `state`: The state variable contains the abbreviation of the state for each observation in the dataset. It is a categorical variable.
+
+- `driver_race`: The driver race variable labels the race of the driver in each county level observation. The driver race variable is categorical and can either be: "Black", "White", or "Hispanic".
+
+- `stops_per_year`: An integer value of the number of stops per year for each group, such as Black drivers in Apache County, Arizona. This variable is a discrete, numerical variable.
+
+- `stop_rate`: The stop_rate variable is a numerical value that represents the rate that drivers of a racial group are stopped, relative to the racial group's percentage of total driving age population in the county. The stop rate is a continuous, numerical variable.
+
+- `search_rate`: The search_rate variable is a proportion that represents the number of stops where the racial group was searched, out of the number of stops of each racial group, per county. This variable is continuous, numerical.
+
+- `consent_search_rate`: The consent_search_rate variable is a proportion that represents the number of stops where the police conducted a search with driver consent, out of the number of stops for that racial group, by county. This variable is continuous, numerical.
+
+- `arrest_rate`: The arrest_rate variable is a proportion that represents the number of stops where the racial group was arrested, out of the number of total stops for that racial group, by county. This variable is continuous, numerical.
+
+- `citation_rate_speeding_stops`: The citation_rate_speeding_stops variable is a proportion that represents the number of stops for speeding that resulted in a citation for a racial group, out of the total number of speeding stops for that population, by county. This variable is continuous, numerical.
+
+- `hit_rate`: The hit_rate variable is a proportion that represents the number of searches that resulted in finding contraband for a given racial group, out of the number of searches of that group, by county. This variable is continuous, numerical.
+
+- `inferred_threshold`: The inferred_threshold variable is an estimated probability of possible contraband that an officer requires before a search. According to the research paper that published this dataset, the researchers used a hierarchical Bayesian threshold test model. This variable is continuous, numerical.

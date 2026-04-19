@@ -46,29 +46,14 @@ Units of measurement
 Coding schemes (e.g., 1 = Yes, 0 = No)
 In your proposal document, include the output of:
 
-```{r load-open-policing-data, eval = FALSE}
-open_policing_raw_data <- read_csv("repo-structure/data/StanfordOpenPolicingcombined_data.csv")
+```{r load-open-policing-data, eval = TRUE}
+open_policing_raw_data <- read_csv("../data/StanfordOpenPolicingcombined_data.csv")
 ```
 
-```{r data-glimpse, eval= FALSE}
+```{r data-glimpse, eval= TRUE}
 library(tidyverse)
-glimpse(your_data)
+glimpse(open_policing_raw_data)
 ```
-
-library(tidyverse)
-glimpse(your_data)
-
-# OR
-
-library(skimr)
-skim(your_data)
-
-This shows:
-
-Number of observations and variables
-Variable types
-Missing values
-Basic summary statistics
 
 ## 3. Data analysis plan
 
