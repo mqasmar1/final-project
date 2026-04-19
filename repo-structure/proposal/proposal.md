@@ -9,32 +9,18 @@ library(broom)
 
 ## 1. Introduction
 
-Section 1: Introduction (max 1 page) Introduce your research question
-and provide context:
-
-1.  What is your research question? Be specific and focused
-
-2.  Why is this interesting? What makes it worth investigating?
-
-3.  Where did the data come from? Source, collection method, credibility
-
-4.  What are the cases? What does each row represent?
-
-5.  What are the key variables? Briefly describe the main variables
-    you’ll use
-
-6.  My research question is, are there racial disparities in police
+1.  My research question is, are there racial disparities in police
     search rates during traffic stops and how do these compare to
     differences in stop rates?
 
-7.  This research question interests me because I want to explore how
+2.  This research question interests me because I want to explore how
     rates of traffic stops correlate with rates of police searches,
     while investigating this in an exploratory manner with real world
     data, across counties and racial groups. This is worth investigating
     because if there are differences, it could signal potential police
     treatment disparities across populations and California regions.
 
-8.  The dataset used in this analysis is the Stanford Open Policing
+3.  The dataset used in this analysis is the Stanford Open Policing
     Dataset. I downloaded a combined nationwide dataset from Sharad
     Goel’s Open Policing Github repository. Sharad Goel is an assistant
     professor at Stanford’s Management Science and Engineering
@@ -43,46 +29,54 @@ and provide context:
     large-scale analysis of racial disparities in police stops across
     the United States: <https://arxiv.org/abs/1706.05678>
 
-9.  Each row represents a set of traffic stop statistics for a
+4.  Each row represents a set of traffic stop statistics for a
     combination of a racial group (Black, White, Hispanic) and a
     specific county. The data was collected over the interval 2011-2015.
 
-10. Key variables in the dataset include location, state, driver_race,
+5.  Key variables in the dataset include location, state, driver_race,
     stop_rate, search_rate, and arrest_rate. Location is represented on
     the county level and has a corresponding state. Ex: “Apache County”.
     Driver race has 3 categories: Black, White, Hispanic.
 
 ## 2. Data
 
-Provide detailed information about your dataset:
+Check the READMEDataDictionary file in the Data repository for detailed
+information about the variables in the Open Policing Dataset.
 
-Place your data file in the /data folder of your repository
-
-Create a data dictionary (README) in the /data folder explaining:
-
-Variable names Variable types (categorical, numerical) Variable
-descriptions Units of measurement Coding schemes (e.g., 1 = Yes, 0 = No)
-In your proposal document, include the output of:
+Here is a preview of the data, which I coded using the glimpse()
+function and initializing the data object.
 
 ``` r
-open_policing_raw_data <- read_csv("repo-structure/data/StanfordOpenPolicingcombined_data.csv")
+open_policing_raw_data <- read_csv("../data/StanfordOpenPolicingcombined_data.csv")
 ```
+
+    ## Rows: 2688 Columns: 11
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (3): location, state, driver_race
+    ## dbl (8): stops_per_year, stop_rate, search_rate, consent_search_rate, arrest...
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 ``` r
 library(tidyverse)
-glimpse(your_data)
+glimpse(open_policing_raw_data)
 ```
 
-library(tidyverse) glimpse(your_data)
-
-# OR
-
-library(skimr) skim(your_data)
-
-This shows:
-
-Number of observations and variables Variable types Missing values Basic
-summary statistics
+    ## Rows: 2,688
+    ## Columns: 11
+    ## $ location                     <chr> "APACHE COUNTY", "APACHE COUNTY", "APACHE…
+    ## $ state                        <chr> "AZ", "AZ", "AZ", "AZ", "AZ", "AZ", "AZ",…
+    ## $ driver_race                  <chr> "Black", "Hispanic", "White", "Black", "H…
+    ## $ stops_per_year               <dbl> 266, 1008, 6322, 1169, 9453, 10826, 1179,…
+    ## $ stop_rate                    <dbl> 0.995, 0.262, 0.431, 0.230, 0.259, 0.145,…
+    ## $ search_rate                  <dbl> 0.077, 0.053, 0.017, 0.047, 0.037, 0.024,…
+    ## $ consent_search_rate          <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+    ## $ arrest_rate                  <dbl> 0.016, 0.018, 0.006, 0.015, 0.010, 0.008,…
+    ## $ citation_rate_speeding_stops <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+    ## $ hit_rate                     <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+    ## $ inferred_threshold           <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
 
 ## 3. Data analysis plan
 
@@ -90,24 +84,108 @@ Outline your preliminary analysis approach:
 
 A. Variables:
 
-Outcome variable (Y): What are you trying to predict or explain?
-Predictor variables (X): What variables will you use to explain the
-outcome? B. Comparison groups (if applicable):
+My outcome variable is search_rate, which is the number of stops where
+the racial group was searched, out of the number of stops of each racial
+group, per county. Variables I will use to explain the outcome include
+driver_race, stop_rate, and location.
 
-Will you compare different groups (e.g., regions, time periods,
-categories)? C. Preliminary exploratory analysis:
+B. Comparison groups:
 
-Include 2-3 summary statistics (means, medians, counts, etc.) Include
-2-3 visualizations (histograms, scatterplots, boxplots, etc.) Explain
-what you learn from each - don’t just show numbers/plots D. Proposed
-methods:
+I will compare across counties in California and across White, Black,
+and Hispanic racial groups.
 
-What statistical methods will you use? (e.g., linear regression,
-hypothesis testing, visualization) Why are these methods appropriate for
-your question? You can refine this later based on what you discover E.
-Hypothesized results:
+C. Preliminary exploratory analysis:
 
-What do you expect to find? What specific results would support your
-hypothesis? Proposal Length Each section: Maximum 1 page (excluding
-figures and code output) Check print preview to confirm length Quality
-over quantity - be concise and clear
+First I will filter the dataset to only include California counties.
+
+``` r
+    open_policing_ca_data <- open_policing_raw_data %>%
+      filter(state == "CA")
+```
+
+Summary Statistics: - Mean and median search rate by race - Number of
+observations of each driver race
+
+``` r
+  open_policing_ca_data %>%
+    group_by(driver_race) %>%
+    summarize(
+      mean_search_rate = mean(search_rate, na.rm=TRUE),
+      median_search_rate = median(search_rate, na.rm=TRUE),
+      count = n()
+    )
+```
+
+    ## # A tibble: 3 × 4
+    ##   driver_race mean_search_rate median_search_rate count
+    ##   <chr>                  <dbl>              <dbl> <int>
+    ## 1 Black                 0.0440             0.0405    54
+    ## 2 Hispanic              0.0526             0.05      54
+    ## 3 White                 0.0269             0.025     54
+
+``` r
+    ggplot(open_policing_ca_data, aes(x=driver_race, y=search_rate)) +
+      geom_boxplot(na.rm=TRUE)
+```
+
+![](proposal_files/figure-gfm/search-rate-by-race-boxplot-1.png)<!-- -->
+
+The boxplot above shows that white drivers tend to have the lowest
+variation in search rates across California counties, and tend to have
+the lowest median search rate between White, Black, and Hispanic
+drivers. On the other hand, Hispanic drivers tend to have the highest
+variation in search rates across California counties, and tend to have
+the highest median search rate out of White, Black, and Hispanic
+drivers. I notice on the graph that there is an outlier in the search
+rate of Black drivers in one California county. This county seems to
+have a much higher search rate of Black drivers, and might be worth
+investigating in my deeper analysis.
+
+``` r
+    ggplot(open_policing_ca_data, aes(x=search_rate)) +
+      geom_histogram(bins = 30) +
+      facet_wrap(~ driver_race) +
+      labs(
+          title = "Distribution of Search Rates by Race",
+          x = "Search Rate",
+          y = "Frequency"
+      )
+```
+
+![](proposal_files/figure-gfm/search-rate-by-race-histogram-1.png)<!-- -->
+
+The histogram above shows the distribution of search rates by race.
+Hispanic drivers appear to have a greater portion of higher search rates
+and have the most spread, while White drivers appear to have the lowest
+spread. This matches with the boxplot from before. However, in the
+histogram, it appears that all 3 racial groups have plots that are
+skewed right, which suggests that most counties in California have low
+search rates across groups.
+
+D. Proposed methods:
+
+I plan to use linear regression to model the association between stop
+rate and search rate, faceted by driver race. Stop rate and search rate
+are continuous, numerical variables which allow me to use a linear
+regression model. A positive slope would tell me that there is a
+positive correlation between these variables, while a negative slope
+would tell me that there is a negative correlation between these
+variables. A positive correlation would indicate that a higher stop rate
+is associated with a higher search rate. I also plan to use
+visualizations such as scatter plots and histograms to show these
+relationships across counties. I also plan to sort California counties
+into cultural regions (Northern California, Southern California) and
+investigate if Simpson’s paradox applies.
+
+E. Hypothesized results:
+
+My hypothesis is that Black and Hispanic drivers have higher search
+rates than White drivers, across Northern and Southern California, and
+California as a whole. I expect that Black and Hispanic drivers will
+have a more positive association between their stop rates and search
+rates than White drivers because of potential implicit racial bias.
+
+Coefficients in the linear regression model would help me identify this
+as well as lines of best fits in my scatter plots. More specifically, a
+greater slope would indicate a more positive association, and a smaller
+slope would indicate a more negative/less positive association.

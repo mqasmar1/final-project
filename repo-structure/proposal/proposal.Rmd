@@ -2,10 +2,10 @@
 title: "Project proposal"
 author: "Max Asmar"
 output:
+  pdf_document: default
+  github_document: default
   html_document:
     df_print: paged
-  github_document: default
-  pdf_document: default
 ---
 
 ```{r load-packages, message = FALSE}
