@@ -1,6 +1,6 @@
 ---
 title: "Project proposal"
-author: "your name"
+author: "Max Asmar"
 output: github_document
 ---
 
@@ -11,6 +11,91 @@ library(broom)
 
 ## 1. Introduction
 
+Section 1: Introduction (max 1 page)
+Introduce your research question and provide context:
+
+1. What is your research question? Be specific and focused
+2. Why is this interesting? What makes it worth investigating?
+3. Where did the data come from? Source, collection method, credibility
+4. What are the cases? What does each row represent?
+5. What are the key variables? Briefly describe the main variables you’ll use
+
+1. My research question is, are there racial disparities in police search rates during traffic stops and how do these compare to differences in stop rates?
+
+2. This research question interests me because I want to explore how rates of traffic stops correlate with rates of police searches, while investigating this in an exploratory manner with real world data, across counties and racial groups. This is worth investigating because if there are differences, it could signal potential police treatment disparities across populations and California regions.
+
+3. The dataset used in this analysis is the Stanford Open Policing Dataset. I downloaded a combined nationwide dataset from Sharad Goel's Open Policing Github repository. Sharad Goel is an assistant professor at Stanford's Management Science and Engineering department who conducts research in computational social science. The Open Policing Dataset was published in the following study, A large-scale analysis of racial disparities in police stops across the United States: https://arxiv.org/abs/1706.05678
+
+4. Each row represents a set of traffic stop statistics for a combination of a racial group (Black, White, Hispanic) and a specific county. The data was collected over the interval 2011-2015.
+
+5. Key variables in the dataset include location, state, driver_race, stop_rate, search_rate, and arrest_rate. Location is represented on the county level and has a corresponding state. Ex: "Apache County". Driver race has 3 categories: Black, White, Hispanic.
+
+
 ## 2. Data
 
+Provide detailed information about your dataset:
+
+Place your data file in the /data folder of your repository
+
+Create a data dictionary (README) in the /data folder explaining:
+
+Variable names
+Variable types (categorical, numerical)
+Variable descriptions
+Units of measurement
+Coding schemes (e.g., 1 = Yes, 0 = No)
+In your proposal document, include the output of:
+
+```{r load-open-policing-data, eval = FALSE}
+open_policing_raw_data <- read_csv("repo-structure/data/StanfordOpenPolicingcombined_data.csv")
+```
+
+```{r data-glimpse, eval= FALSE}
+library(tidyverse)
+glimpse(your_data)
+```
+
+library(tidyverse)
+glimpse(your_data)
+
+# OR
+
+library(skimr)
+skim(your_data)
+
+This shows:
+
+Number of observations and variables
+Variable types
+Missing values
+Basic summary statistics
+
 ## 3. Data analysis plan
+
+Outline your preliminary analysis approach:
+
+A. Variables:
+
+Outcome variable (Y): What are you trying to predict or explain?
+Predictor variables (X): What variables will you use to explain the outcome?
+B. Comparison groups (if applicable):
+
+Will you compare different groups (e.g., regions, time periods, categories)?
+C. Preliminary exploratory analysis:
+
+Include 2-3 summary statistics (means, medians, counts, etc.)
+Include 2-3 visualizations (histograms, scatterplots, boxplots, etc.)
+Explain what you learn from each - don’t just show numbers/plots
+D. Proposed methods:
+
+What statistical methods will you use? (e.g., linear regression, hypothesis testing, visualization)
+Why are these methods appropriate for your question?
+You can refine this later based on what you discover
+E. Hypothesized results:
+
+What do you expect to find?
+What specific results would support your hypothesis?
+Proposal Length
+Each section: Maximum 1 page (excluding figures and code output)
+Check print preview to confirm length
+Quality over quantity - be concise and clear
