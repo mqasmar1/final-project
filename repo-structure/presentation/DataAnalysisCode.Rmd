@@ -1,0 +1,92 @@
+---
+title: "DataAnalysisCode"
+output: html_document
+---
+
+LOAD DATA:
+
+```{r load-packages, message = FALSE}
+library(tidyverse)
+library(broom)
+library(tidymodels)
+```
+
+```{r load-open-policing-data, eval = TRUE}
+open_policing_raw_data <- read_csv("../data/StanfordOpenPolicingcombined_data.csv")
+```
+
+```{r data-glimpse, eval= TRUE}
+library(tidyverse)
+glimpse(open_policing_raw_data)
+```
+
+```{r filter-california, eval = TRUE}
+    open_policing_ca_data <- open_policing_raw_data %>%
+      filter(state == "CA")
+```
+
+PLOT STOP RATE AS FUNCTION OF SEARCH RATE:
+
+```{r scatter-with-line, eval = TRUE}
+# Remember to change eval=FALSE to eval=TRUE!
+ggplot(data = open_policing_ca_data, aes(x = stop_rate, y = search_rate)) +
+  geom_point() +
+  coord_cartesian(xlim = c(0, 25), ylim = c(0, 0.1)) +
+  geom_smooth(method = "lm", se = FALSE, color = "orange") +
+  labs(
+    title = "Stop Rate v. Search Rate Scatter Plot with Linear Regression",
+    x = "Stop Rate",
+    y = "Search Rate"
+  )
+```
+
+LINEAR REGRESSION (Search Rate as a function of only Stop Rate):
+
+```{r lin-reg-stop_rate-search_rate1, eval = TRUE}
+# Remember to change eval=FALSE to eval=TRUE!
+stoprate_searchrate_fit_1 <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(search_rate ~ stop_rate, data = open_policing_ca_data)
+
+# View the results
+tidy(stoprate_searchrate_fit_1)
+glance(stoprate_searchrate_fit_1)
+```
+
+The r^2 value is 0.00377, meaning that only 0.377% of the variability in search rates is explained by stop rates.
+
+```{r factor-driver_race-coeficient, eval = FALSE}
+# Remember to change eval=FALSE to eval=TRUE!
+open_policing_ca_data <- open_policing_ca_data
+  driver_race_new <- factor(driver_race, levels = c("White", "Black", "Hispanic"))
+```
+
+LINEAR REGRESSION (Search Rate as a function of stop rate and driver race):
+
+```{r lin-reg-stop_rate-search_rate-main_effects, eval = TRUE}
+# Remember to change eval=FALSE to eval=TRUE!
+stoprate_searchrate_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(search_rate ~ stop_rate + driver_race, data = open_policing_ca_data)
+
+# View the results
+tidy(stoprate_searchrate_fit)
+glance(stoprate_searchrate_fit)
+```
+
+search_rate = 0.0445 -0.0000937 * stop_rate + 0.00819 * driver_raceHispanic - 0.0176 * driver_raceWhite
+
+Model for Hispanic Drivers: search_rate = 0.05269 -0.0000937 * stop_rate
+
+Model for White Drivers: search_rate = 0.0269 -0.0000937 * stop_rate 
+
+Model for Black Drivers: search_rate = 0.0445 -0.0000937 * stop_rate
+
+When stopped, search rates appear to be higher for Hispanic and Black drivers compared to white Drivers according to my main effects model. Hispanic drivers have the highest search rates. Stop rate has little correlation with search_rate, as shown by the graph and model coefficient of (-0.0000937), however driver race does, as shown by the original model coefficients.  
+
+The R^2 value is 0.278, meaning that 27.8% of the variability in search rates is explained by stop rates and the driver's race. 
+
+
+MUTATE DATASET BY CULTURAL REGION (NorCal or SoCal or Other):
+
+
