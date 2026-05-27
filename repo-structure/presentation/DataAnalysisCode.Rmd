@@ -9,6 +9,8 @@ LOAD DATA:
 library(tidyverse)
 library(broom)
 library(tidymodels)
+library(infer)
+library(rsample)
 ```
 
 ```{r load-open-policing-data, eval = TRUE}
@@ -53,7 +55,7 @@ tidy(stoprate_searchrate_fit_1)
 glance(stoprate_searchrate_fit_1)
 ```
 
-The r^2 value is 0.00377, meaning that only 0.377% of the variability in search rates is explained by stop rates.
+The r^2 value is 0.00377, meaning that only 0.377% of the variability in search rates is explained by stop rates. There is little to no correlation between stop rates and search rates, across all California counties. 
 
 ```{r factor-driver_race-coeficient, eval = FALSE}
 # Remember to change eval=FALSE to eval=TRUE!
@@ -82,11 +84,60 @@ Model for White Drivers: search_rate = 0.0269 -0.0000937 * stop_rate
 
 Model for Black Drivers: search_rate = 0.0445 -0.0000937 * stop_rate
 
-When stopped, search rates appear to be higher for Hispanic and Black drivers compared to white Drivers according to my main effects model. Hispanic drivers have the highest search rates. Stop rate has little correlation with search_rate, as shown by the graph and model coefficient of (-0.0000937), however driver race does, as shown by the original model coefficients.  
+When stopped, search rates appear to be higher for Hispanic and Black drivers compared to white Drivers in California according to my main effects model. Hispanic drivers have the highest search rates. 
 
 The R^2 value is 0.278, meaning that 27.8% of the variability in search rates is explained by stop rates and the driver's race. 
 
+BOOTSTRAP Linear Regression Model Coefficients:
+
+```{r bootstrap-lin-reg-coefficients, eval = TRUE}
+
+# Using RSample Package
+
+set.seed(1234)
+bootstrap <- bootstraps(open_policing_ca_data, times = 1000)
+results_frame <- data.frame()
+
+for(i in 1:1000) {
+  bootstrap_data <- analysis(bootstrap$splits[[i]])
+  lin_reg_model <- lm(search_rate ~ stop_rate + driver_race, data = bootstrap_data)
+  
+  boot_coefs <- tidy(lin_reg_model)
+  boot_coefs$replicate <- i
+  results_frame <- rbind(results_frame, boot_coefs)
+}
+
+results_frame %>%
+  group_by(term) %>%
+  summarise(
+    lower_confidence = quantile(estimate, 0.025),
+    upper_confidence = quantile(estimate, 0.975)
+  )
+```
+
 
 MUTATE DATASET BY CULTURAL REGION (NorCal or SoCal or Other):
+
+```{r mutate-by-california-region, eval = TRUE}
+    open_policing_ca_data <- open_policing_ca_data %>%
+  mutate(region = case_when(
+    location %in% c("BUTTE COUNTY", "COLUSA COUNTY", "EL DORADO COUNTY", "GLENN COUNTY", "LASSEN COUNTY", "MODOC COUNTY", "NEVADA COUNTY", "PLACER COUNTY", "PLUMAS COUNTY", "SACRAMENTO COUNTY", "SHASTA COUNTY", "SIERRA COUNTY", "SISKIYOU COUNTY", "SUTTER COUNTY", "TEHAMA COUNTY", "YOLO COUNTY", "YUBA COUNTY") ~ "Superior California",
+    location %in% c("DEL NORTE COUNTY", "HUMBOLDT COUNTY", "LAKE COUNTY", "MENDOCINO COUNTY", "NAPA COUNTY", "SONOMA COUNTY", "TRINITY COUNTY") ~ "North Coast",
+    location %in% c("ALAMEDA COUNTY", "CONTRA COSTA COUNTY", "MARIN COUNTY", "SAN FRANCISCO COUNTY", "SAN MATEO COUNTY", "SANTA CLARA COUNTY", "SOLANO COUNTY") ~ "San Francisco Bay Area",
+    location %in% c("ALPINE COUNTY", "AMADOR COUNTY", "CALAVERAS COUNTY", "MADERA COUNTY", "MARIPOSA COUNTY", "MERCED COUNTY", "MONO COUNTY", "SAN JOAQUIN COUNTY", "STANISLAUS COUNTY", "TUOLUMNE COUNTY") ~ "Northern San Joaquin Valley",
+    location %in% c("MONTEREY COUNTY", "SAN BENITO COUNTY", "SAN LUIS OBISPO COUNTY", "SANTA BARBARA COUNTY", "SANTA CRUZ COUNTY", "VENTURA COUNTY") ~ "Central Coast",
+    location %in% c("FRESNO COUNTY", "INYO COUNTY", "KERN COUNTY", "KINGS COUNTY", "TULARE COUNTY") ~ "Southern San Joaquin Valley",
+    location %in% c("RIVERSIDE COUNTY", "SAN BERNARDINO COUNTY") ~ "Inland Empire",
+    location %in% c("LOS ANGELES COUNTY") ~ "Los Angeles",
+    location %in% c("ORANGE COUNTY") ~ "Orange County",
+    location %in% c("IMPERIAL COUNTY", "SAN DIEGO COUNTY") ~ "San Diego - Imperial",
+    TRUE ~ "Other"
+  ))
+
+open_policing_ca_data %>% count(region)
+
+```
+
+These region designations are from the California Census.
 
 
