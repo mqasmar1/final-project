@@ -1,8 +1,8 @@
 ---
-title: "Presentation title"
-subtitle: "Presentation subtitle (if any)"
-author: "your name"
-institute: "University of Edinburgh"
+title: "Open Policing Analysis"
+subtitle: "Math Final Project"
+author: "Max Asmar"
+institute: "Santiago Canyon College"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -22,6 +22,9 @@ library(tidymodels)
 library(palmerpenguins)
 library(knitr)
 library(xaringanthemer)
+library(broom)
+library(infer)
+library(rsample)
 ```
 
 ```{r setup, include=FALSE}
@@ -30,174 +33,99 @@ knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618,
 ```
 
 ```{r load-data, include=FALSE}
-# Load your data here
+open_policing_raw_data <- read_csv("../data/StanfordOpenPolicingcombined_data.csv")
 ```
 
-```{r}
+```{r, echo = FALSE}
 style_xaringan(
   title_slide_background_image = "img/confetti.jpg"
 )
 ```
 
-
-class: center, middle
-
-## A statement of the overall goal / research question
-
----
-
 class: inverse, center, middle
 
-# Section title
+# Research Question
+
+Are there racial disparities in police search rates during traffic stops in California and how do these compare to differences in stop rates?
 
 ---
 
-# Hello World
+# Stanford Open Policing Dataset
 
-- Click the `Knit` button to compile your presentation
+- combined nationwide dataset from Sharad Goel's Open Policing Github repository. 
 
-- Make sure to commit and push all resulting files to your GitHub repo
+- Sharad Goel: assistant professor at Stanford's Management Science and Engineering department who conducts research in computational social science.
 
----
+- Each row:  set of traffic stop statistics for a combination of a racial group (Black, White, Hispanic) and a specific county.
 
-class: inverse, middle, center
-
-# Using xaringan
+- Key variables: location, state, driver_race, stop_rate, search_rate, and arrest_rate.
 
 ---
 
-# xaringan
+# Methods
 
-- The presentation is created using the `xaringan` package
+- Used linear regression, modeling search rate as a function of stop rate and driver race. 
 
-- Use `---` to separate slides and `--` for incremental builds
+I chose this linear model because it uses both numerical data (stop rate) and categorical data (driver race) to predict a continuous, numerical variable (search rate). 
 
---
+- Bootstrapped linear model coefficients
 
-- Like this
+- Used interactive effects model, modeling search rate as a function of stop rate and driver race * region
 
----
-
-# Layouts
-
-You can use plain text
-
-- or bullet points
-
-.pull-left[
-or text in two columns $^*$
-]
-.pull-right[
-- like
-- this
-]
-
-.footnote[
-[*] And add footnotes
-]
+I chose this linear interactive effects model to learn the association between driver race and search rate in different California regions. By analyzing the slope I can see which factors (driver race, stop rate) correlate to search rate.
 
 ---
 
-# Code
+# Results
 
-```{r boring-regression}
-# a boring regression
-model <- lm(dist ~ speed, data = cars)
-tidy(model)
-glance(model)
+- Found that on a statewide level, Hispanic drivers are expected to be searched at about 5.27% after being stopped, while Black drivers are expected to be searched at about 4.45%, while White drivers are expected to be searched at 2.69%. 
+
+- On a regional level, the p values for the interactive terms were above the significance level of 0.05. This demonstrates that the increased search rates for drivers of color remains the same across California regions, with little to no variation. 
+
+```{r filter-california, include = FALSE}
+    open_policing_ca_data <- open_policing_raw_data %>%
+      filter(state == "CA")
 ```
 
 ---
 
-# Plots
+# Results
 
-```{r recode-species, echo = FALSE}
-# In this chunk I'm doing a bunch of analysis that I don't want to present 
-# in my slides. But I need the resulting data frame for a plot I want to present.
-iris_modified <- iris %>%
-  mutate(Species = fct_other(Species, keep = "setosa"))
-```
-
-```{r plot-iris, echo = FALSE}
-# Code hidden with echo = FALSE
-# Uses modified iris dataset from previous chunk
-# Play around with height and width until you're happy with the look
-ggplot(data = iris_modified, mapping = aes(x = Sepal.Width, y = Sepal.Length, color = Species)) +
-  geom_point() + 
-  theme_minimal() # theme options: https://ggplot2.tidyverse.org/reference/ggtheme.html
-```
-
----
-
-## Plot and text
-
-.pull-left[
-- Some text
-- goes here
-]
-.pull-right[
-```{r warning=FALSE, out.width="100%", fig.width=4, echo=FALSE}
-# see how I changed out.width and fig.width from defaults
-# to make the figure bigger
-ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
-  geom_boxplot() +
-  theme_minimal()
-```
-]
-
----
-
-# Tables
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-```{r iris-table, echo = FALSE}
-kable(head(iris), format = "html")
+```{r plot-regression-lines, eval = TRUE, echo = FALSE}
+ggplot(open_policing_ca_data, aes(x = stop_rate, y = search_rate, color = driver_race)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  coord_cartesian(xlim = c(0, 4), ylim = c(0, 0.1)) +
+  labs(
+    x = "Stop Rate",
+    y = "Search Rate",
+    color = "Driver Race",
+    title = "Driver Race and Stop Rate affect Search Rate",
+    subtitle = "California"
+  )
 ```
 
 ---
 
-# Images
+# Results 
 
-```{r castle, echo = FALSE, out.width = "60%", fig.align = "center", fig.cap = "Image credit: Photo by Jörg Angeli on Unsplash."}
-include_graphics("https://images.unsplash.com/photo-1535448033526-c0e85c9e6968?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80")
+```{r stop-rate-by-race-boxplot, eval = TRUE, echo = FALSE}
+    ggplot(open_policing_ca_data, aes(x=driver_race, y=stop_rate)) +
+      geom_boxplot(na.rm=TRUE) +
+      coord_cartesian(ylim = c(0, 3)) +
+      labs(
+          title = "Distribution of Stop Rates by Race",
+          x = "Driver Race",
+          y = "Stop Rate"
+      )
 ```
 
-Or you can also include a full page image. See next slide.
+# Limitations and Conclusions
 
----
+- Only stop rate as a control variable. Gender, age, and other factors might have an impact on search and stop rates. 
 
-background-image: url(https://images.unsplash.com/photo-1535448033526-c0e85c9e6968?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80)
+- Drivers of color are more likely to be searched than white drivers, even after controlling for stop rates, across all regions in California, holding everything else constant.
 
----
+- Black drivers are most likely to be stopped the most of the 3 groups, while Hispanic drivers are the least likely to be stopped.
 
-# Math Expressions
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. &#36;\alpha+\beta$ renders $\alpha+\beta$. You can use the display style with double dollar signs:
-
-```
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
-
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-
-Limitations:
-
-1. The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-1. There should not be spaces after the opening `$` or before the closing `$`.
-
-1. Math does not work on the title slide (see [#61](https://github.com/yihui/xaringan/issues/61) for a workaround).
-
----
-
-# Feeling adventurous?
-
-- Want to find out more about `xaringan`? See https://slides.yihui.name/xaringan/#1.
-
-- You are welcomed to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
-
-- But some of you might want to play around with slide styling. The 
-`xaringanthemer` provides some solutions for this that: https://pkg.garrickadenbuie.com/xaringanthemer.
-
-- And if you want more bells and whistles, there is also `xaringanExtra`: https://pkg.garrickadenbuie.com/xaringanExtra.
+- I would explore how this varies in other states and explore how cultural/political attitudes of a region impact search and stop rates.
