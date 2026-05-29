@@ -88,9 +88,7 @@ I chose this linear interactive effects model to learn the association between d
 ```
 
 ---
-
-# Results
-
+Results
 ```{r plot-regression-lines, eval = TRUE, echo = FALSE}
 ggplot(open_policing_ca_data, aes(x = stop_rate, y = search_rate, color = driver_race)) +
   geom_point(alpha = 0.5) +
@@ -104,7 +102,6 @@ ggplot(open_policing_ca_data, aes(x = stop_rate, y = search_rate, color = driver
     subtitle = "California"
   )
 ```
-
 ---
 
 # Results 
@@ -119,6 +116,8 @@ ggplot(open_policing_ca_data, aes(x = stop_rate, y = search_rate, color = driver
           y = "Stop Rate"
       )
 ```
+
+---
 
 # Limitations and Conclusions
 
