@@ -45,15 +45,17 @@ class: inverse, center, middle
 
 Are there racial disparities in police search rates during traffic stops in California and how do these compare to differences in stop rates?
 
+Differences -&gt; police treatment disparities for drivers of color across California
+
 ---
 
 # Stanford Open Policing Dataset
 
 - combined nationwide dataset from Sharad Goel's Open Policing Github repository. 
 
-- Sharad Goel: assistant professor at Stanford's Management Science and Engineering department who conducts research in computational social science.
+- Stanford's Management Science and Engineering department
 
-- Each row:  set of traffic stop statistics for a combination of a racial group (Black, White, Hispanic) and a specific county.
+- Each row: traffic stop statistics by race and county
 
 - Key variables: location, state, driver_race, stop_rate, search_rate, and arrest_rate.
 
@@ -61,23 +63,20 @@ Are there racial disparities in police search rates during traffic stops in Cali
 
 # Methods
 
-- Used linear regression, modeling search rate as a function of stop rate and driver race. 
-
-I chose this linear model because it uses both numerical data (stop rate) and categorical data (driver race) to predict a continuous, numerical variable (search rate). 
-
+- linear regression (search rate = stop rate + driver race). 
 - Bootstrapped linear model coefficients
-
 - Used interactive effects model, modeling search rate as a function of stop rate and driver race * region
-
-I chose this linear interactive effects model to learn the association between driver race and search rate in different California regions. By analyzing the slope I can see which factors (driver race, stop rate) correlate to search rate.
+- Slope -&gt; which factors (driver race, stop rate) correlate to search rate.
 
 ---
 
 # Results
 
-- Found that on a statewide level, Hispanic drivers are expected to be searched at about 5.27% after being stopped, while Black drivers are expected to be searched at about 4.45%, while White drivers are expected to be searched at 2.69%. 
+- in California, Hispanic drivers are expected 5.27% search rate after being stopped, while Black drivers are expected 4.45% search rate after being stopped, while White drivers are expected to have 2.69% search rate
 
-- On a regional level, the p values for the interactive terms were above the significance level of 0.05. This demonstrates that the increased search rates for drivers of color remains the same across California regions, with little to no variation. 
+- On a regional level, the p values &gt; significance level. Increased search rates for drivers of color remain the same across California regional levels, with little to no variation.
+
+- Black drivers are most likely to be stopped the most of the 3 groups, while Hispanic drivers are the least likely to be stopped.
 
 
 
@@ -99,11 +98,9 @@ Results
 
 # Limitations and Conclusions
 
-- Only stop rate as a control variable. Gender, age, and other factors might have an impact on search and stop rates. 
+- Only stop rate as a control variable. Gender, age, and other variables could be controls.
 
 - Drivers of color are more likely to be searched than white drivers, even after controlling for stop rates, across all regions in California, holding everything else constant.
-
-- Black drivers are most likely to be stopped the most of the 3 groups, while Hispanic drivers are the least likely to be stopped.
 
 - I would explore how this varies in other states and explore how cultural/political attitudes of a region impact search and stop rates.
     </textarea>

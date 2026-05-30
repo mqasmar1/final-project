@@ -1,39 +1,50 @@
 ---
-title: Project title
-author: by Team name
+title: Open Policing Analysis - Executive Summary
+author: by Max Asmar
 output: github_document
 ---
 
-## Summary
+RESEARCH QUESTION:
 
-Write-up of your project and findings go here. 
-Think of this as the text of your presentation. 
-The length should be roughly 5 minutes when read out loud.
-Although pacing varies, a 5-minute speech is roughly 750 words. 
-To use the word count addin, select the text you want to count the words of (probably this is the 
-Summary section of this document, go to Addins, and select the `Word count` addin).
-This addin counts words using two different algorithms, but the results should be similar and as long as you're in the ballpark of 750 words, you're good! 
-The addin will ignore code chunks and only count the words in prose.
+My research question is, are there racial disparities in police search rates during traffic stops and how do these compare to differences in stop rates? This research question interests me because I want to explore how rates of traffic stops correlate with rates of police searches, while investigating this in an exploratory manner with real world data, across counties and racial groups. This is worth investigating because if there are differences, it could signal potential police treatment disparities across populations and California regions.
 
-You can also load your data here and present any analysis results / plots, but I strongly urge you to keep that to a minimum (maybe only the most important graphic, if you have one you can choose). 
-And make sure to hide your code with  `echo = FALSE` unless the point you are trying to make is about the code itself.
-Your results with proper output and graphics go in your presentation, this space is for a brief summary of your project.
+DATASET:
 
-```{r load-data, echo = FALSE}
-# load data here, if you like
-```
+The dataset used in this analysis is the Stanford Open Policing Dataset. I downloaded a combined nationwide dataset from Sharad Goel's Open Policing Github repository. Sharad Goel is an assistant professor at Stanford's Management Science and Engineering department who conducts research in computational social science. The Open Policing Dataset was published in the following study, A large-scale analysis of racial disparities in police stops across the United States: https://arxiv.org/abs/1706.05678. It has 2688 observations and 11 variables. 
 
-## Presentation
+METHODOLOGY:
 
-Our presentation can be found [here](presentation/presentation.html).
+I used a multiple linear regression model to model the search rate as a function of stop rate and driver race. I chose this linear model because it uses both numerical data (stop rate) and categorical data (driver race) to predict a continuous, numerical variable (search rate). I also bootstrapped the coefficients of this model with 95% confidence intervals. 
+
+I then used an interactive effects linear model, modeling search rate as a function of stop rate and driver race * region. I chose this linear interactive effects model to learn the association between driver race and search rate in different California regions. By analyzing the slope I can see which factors (driver race, stop rate) correlate to search rate.
+
+I sorted the regions into 10 groups using California Census data. The regions included Superior California, North Coast, San Francisco Bay Area, Northern San Joaquin Valley, Central Coast, Southern San Joaquin Valley, Los Angeles, Orange County, and San Diego - Imperial.
+
+KEY FINDINGS:
+
+I found in my main effects model that on a statewide (California) level, Hispanic drivers are expected to be searched at about 5.27% after being stopped, while Black drivers are expected to be searched at about 4.45%, while White drivers are expected to be searched at 2.69%. 
+
+Coefficients for Black and Hispanic drivers were still positive in their confidence interval ranges as White was the baseline level for the model. 
+
+On a regional level in California, the p values for the interactive terms were above the significance level of 0.05 and the coefficients of the interactive terms only represented around a tenth of a percentage, at maximum. This demonstrates that the increased search rates for drivers of color mainly remains the same across California regions, with little to no variation.
+
+In summary, these findings show that in California there are notable disparities in the search rates for Black and Hispanic drivers, as they are searched more often than White drivers. These disparities persist even across California census regions. This could signal a need for statewide policies or initiatives to promote more equal treatment of these groups.
+
+LIMITATIONS:
+
+My analysis only uses stop rate and region as control variables, but other factors could also impact search rates, such as gender and age. The dataset is also from 2011-2015, which is outdated as current police practices/standards might have changed since then. My models also only predict association, not causation, as it is an exploratory analysis.
+
 
 ## Data 
 
-Include a citation for your data here. 
-See http://libraryguides.vu.edu.au/c.php?g=386501&p=4347840 for guidance on proper citation for datasets. 
-If you got your data off the web, make sure to note the retrieval date.
+Goel, Sharad (2017) A large-scale analysis of racial disparities in police stops across the United States. Stanford Computational Policy Lab. https://web.stanford.edu/~csimoiu/doc/traffic-stops.pdf, 5harad Open Policing Repository.
+
+Here is a link to the repository on Github: https://github.com/5harad/openpolicing
+
+I used the Combined Data CSV from this subdirectory: https://github.com/5harad/openpolicing/tree/master/results/data_for_figures
+
 
 ## References
 
-List any references here. You should, at a minimum, list your data source.
+E. Pierson, C. Simoiu, J. Overgoor, S. Corbett-Davies, V. Ramachandran, C. Phillips, S. Goel. (2017) “A large-scale analysis of racial disparities in police stops across the United States”.
 
